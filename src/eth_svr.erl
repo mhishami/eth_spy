@@ -158,9 +158,13 @@ sanitize_block(Resp) ->
         _ -> V
       end
     end,
-  Res = maps:map(Fun, Resp),
-  % Res2 = maps:put(<<"id">>, maps:get(<<"hash">>, Res), Res),
-  {ok, Res}.
+  %  return empty maps if no reply from server.
+  case Resp of
+    null ->
+      {ok, maps:new();
+    _ ->
+      {ok, maps:map(Fun, Resp)}
+  end.
 
 -spec sanitize_transaction(Transactions::list()) -> list().
 sanitize_transaction(Transactions) ->

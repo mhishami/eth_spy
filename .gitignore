@@ -1,0 +1,7 @@
+_rel
+.erlang.mk
+deps
+ebin
+resource/*.json
+resource/data
+query/node_modules

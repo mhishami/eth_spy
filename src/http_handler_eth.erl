@@ -15,13 +15,15 @@ init(_, Req, _Opts) ->
 handle(Req, State=#state{}) ->
   {From, Req1} = cowboy_req:binding(from, Req),
   {To, Req2} = cowboy_req:binding(to, Req1),
+  ?DEBUG("From: ~p, To: ~p~n", [From, To]),
+  
   End = case To of
           undefined ->
             {ok, Num} = eth_svr:get_block_number(),
             Num;
           _ -> binary_to_integer(To)
         end,
-  % ?INFO("Processing ETH data from ~p to ~p~n", [From, End]),
+  ?INFO("Processing ETH data from ~p to ~p~n", [From, End]),
   {ok, BlockInfo} = eth_svr:get_blocks(binary_to_integer(From), End),
 
   {ok, Req3} = cowboy_req:reply(200, [

@@ -49,7 +49,8 @@ get_block(BlockNumber) when is_integer(BlockNumber) ->
 
 get_blocks(From, To) when is_integer(From), 
                           is_integer(To),
-                          From < To ->
+                          From =< To ->
+  ?DEBUG("Getting blocks: ~p -> ~p~n", [From, To]),
   gen_server:call(?SERVER, {get_blocks_by_num, From, To}, infinity).
 
 init([]) ->
@@ -161,7 +162,7 @@ sanitize_block(Resp) ->
   %  return empty maps if no reply from server.
   case Resp of
     null ->
-      {ok, maps:new();
+      {ok, maps:new()};
     _ ->
       {ok, maps:map(Fun, Resp)}
   end.
